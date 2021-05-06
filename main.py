@@ -22,4 +22,6 @@ def read():
 
 
 while True:
-    print(read())
+    line = read()
+    if (line != ''):
+        print(line)
