@@ -7,6 +7,16 @@
 
 virtuabotixRTC mh_rtc(CLK, DAT, RST);
 
+uint8_t to_seconds() {
+
+ int seconds = mh_rtc.seconds;
+ int minutes = mh_rtc.minutes;
+ int hours = mh_rtc.hours;
+
+ return seconds + minutes * 60 + hours * 3600;
+  
+}
+
 void setup() {
 
   pinMode(SIGSEND, INPUT);
@@ -20,7 +30,7 @@ void loop() {
   mh_rtc.updateTime();
 
   if (digitalRead(SIGSEND)==HIGH) {
-    Serial.println(mh_rtc.seconds);
+    Serial.println(to_seconds());
     while(digitalRead(SIGSEND)==HIGH) {
       
     }
