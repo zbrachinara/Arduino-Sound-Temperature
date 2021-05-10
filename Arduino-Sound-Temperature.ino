@@ -7,7 +7,7 @@
 
 virtuabotixRTC mh_rtc(CLK, DAT, RST);
 
-uint8_t to_seconds() {
+uint16_t to_seconds() {
 
  int seconds = mh_rtc.seconds;
  int minutes = mh_rtc.minutes;
