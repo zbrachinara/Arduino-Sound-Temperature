@@ -12,6 +12,7 @@ virtuabotixRTC mh_rtc(CLK, DAT, RST);
 dht DHT;
 
 #define DHT11_PIN 12
+volatile byte state = LOW;
 
 uint16_t to_seconds() {
 
@@ -25,26 +26,24 @@ uint16_t to_seconds() {
 
 void setup() {
 
-  pinMode(SIGSEND, INPUT);
+  pinMode(SIGSEND, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(SIGSEND), printWindSpeed, RISING);
   Serial.begin(9600);
   mh_rtc.setDS1302Time(0, 0, 0, 0, 0, 0, 0);
+  
   
 }
 
 void loop() {
-  
-  mh_rtc.updateTime();
+ int chk = DHT.read11(DHT11_PIN);
+ Serial.print("Temperature = ");
+ Serial.println(DHT.temperature);
+ Serial.print("Humidity = ");
+ Serial.println(DHT.humidity);
+ delay(5000);
+}
 
-  if (digitalRead(SIGSEND)==HIGH) {
-    Serial.println(to_seconds());
-    int chk = DHT.read11(DHT11_PIN);
-    Serial.print("Temperature = ");
-    Serial.println(DHT.temperature);
-    Serial.print("Humidity = ");
-    Serial.println(DHT.humidity);
-    while(digitalRead(SIGSEND)==HIGH) {
-      
-    }
-  }
-  
+void printWindSpeed() {
+ mh_rtc.updateTime();
+ Serial.println(to_seconds());
 }
