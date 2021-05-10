@@ -7,6 +7,12 @@
 
 virtuabotixRTC mh_rtc(CLK, DAT, RST);
 
+#include <dht.h>
+
+dht DHT;
+
+#define DHT11_PIN 12
+
 uint16_t to_seconds() {
 
  int seconds = mh_rtc.seconds;
@@ -31,6 +37,11 @@ void loop() {
 
   if (digitalRead(SIGSEND)==HIGH) {
     Serial.println(to_seconds());
+    int chk = DHT.read11(DHT11_PIN);
+    Serial.print("Temperature = ");
+    Serial.println(DHT.temperature);
+    Serial.print("Humidity = ");
+    Serial.println(DHT.humidity);
     while(digitalRead(SIGSEND)==HIGH) {
       
     }
