@@ -2,7 +2,7 @@
 
 dht DHT;
 
-#define DHT11_PIN 7
+#define DHT11_PIN 12
 
 void setup(){
   Serial.begin(9600);
