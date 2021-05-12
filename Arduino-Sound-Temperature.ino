@@ -36,14 +36,17 @@ void setup() {
 
 void loop() {
  int chk = DHT.read11(DHT11_PIN);
- Serial.print("Temperature = ");
+// Serial.print("Temperature = ");
+ Serial.write(0b00);
  Serial.println(DHT.temperature);
- Serial.print("Humidity = ");
+// Serial.print("Humidity = ");
+ Serial.write(0b01);
  Serial.println(DHT.humidity);
  delay(5000);
 }
 
 void printWindSpeed() {
  mh_rtc.updateTime();
+ Serial.write(0b10);
  Serial.println(to_seconds());
 }
