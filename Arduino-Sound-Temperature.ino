@@ -3,7 +3,7 @@
 #define DAT 7
 #define RST 8
 
-#define SIGSEND 4
+#define SIGSEND 3
 
 virtuabotixRTC mh_rtc(CLK, DAT, RST);
 
