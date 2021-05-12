@@ -1,17 +1,16 @@
 #include "src/ArduinoRTClibrary/virtuabotixRTC.h"
+#include <dht.h>
+
 #define CLK 6
 #define DAT 7
 #define RST 8
 
 #define SIGSEND 3
 
-virtuabotixRTC mh_rtc(CLK, DAT, RST);
-
-#include <dht.h>
-
-dht DHT;
-
 #define DHT11_PIN 12
+
+virtuabotixRTC mh_rtc(CLK, DAT, RST);
+dht DHT;
 volatile byte state = LOW;
 
 uint16_t to_seconds() {
@@ -36,10 +35,8 @@ void setup() {
 
 void loop() {
  int chk = DHT.read11(DHT11_PIN);
-// Serial.print("Temperature = ");
  Serial.write(0b00);
  Serial.println(DHT.temperature);
-// Serial.print("Humidity = ");
  Serial.write(0b01);
  Serial.println(DHT.humidity);
  delay(5000);
