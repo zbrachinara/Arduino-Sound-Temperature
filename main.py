@@ -1,18 +1,10 @@
 
-from datastore import read
+from datastore import read, Data
+
+data = Data()
 
 if __name__ == '__main__':
     while True:
-        line = read()
-        prefix = line[:4]
-        content = line[4:]
+        data.print_buffer()
+        # line = read()
 
-        if prefix == '\\x00':
-            print("Temperature: ", end='')
-        elif prefix == '\\x01':
-            print("Humidity: ", end='')
-        elif prefix == '\\x02':
-            print("Time: ", end='')
-
-        if len(content) > 0:
-            print(content)
