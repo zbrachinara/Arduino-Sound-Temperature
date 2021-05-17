@@ -32,14 +32,35 @@ class Data:
 
         self.temperature_dat = ([], [])
         self.humidity_dat = ([], [])
+        self.an_dat = []
 
         self.read_thread.start()
 
     def update(self):
         while True:
             line = read()
-            if line != '':
-                self.comm.put(line)
+
+            if line == '':
+                continue
+
+            prefix = line[:4]
+            content = line[4:]
+
+            if prefix == r'\x00':  # DHT Read
+                # print("DHT:", end='')
+
+                temp, hum, time = content.split(':')
+                self.temperature_dat[0].append(time)
+                self.temperature_dat[1].append(temp)
+                self.humidity_dat[0].append(time)
+                self.humidity_dat[1].append(hum)
+
+            elif prefix == r'\x01':  # Anemometer Read
+                # print("An_cycle:", end='')
+                self.an_dat.append(content)
+
+            self.comm.put(line)
+
 
     def print_buffer(self):
         if not self.comm.empty():
@@ -47,12 +68,4 @@ class Data:
             prefix = line[:4]
             content = line[4:]
 
-            if prefix == '\\x00':
-                print("Temperature: ", end='')
-            elif prefix == '\\x01':
-                print("Humidity: ", end='')
-            elif prefix == '\\x02':
-                print("Time: ", end='')
-
-            if len(content) > 0:
-                print(content)
+            print(content)

@@ -1,10 +1,14 @@
 
-from datastore import read, Data
+from datastore import Data
+from time import sleep
 
 data = Data()
 
 if __name__ == '__main__':
     while True:
-        data.print_buffer()
-        # line = read()
+        print(*data.temperature_dat)
+        print(*data.humidity_dat)
+        print(data.an_dat)
+        sleep(5)
+        # data.print_buffer()
 

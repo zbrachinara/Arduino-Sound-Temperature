@@ -15,6 +15,8 @@ volatile byte state = LOW;
 
 uint16_t to_seconds() {
 
+ mh_rtc.updateTime();
+ 
  int seconds = mh_rtc.seconds;
  int minutes = mh_rtc.minutes;
  int hours = mh_rtc.hours;
@@ -35,15 +37,16 @@ void setup() {
 
 void loop() {
  int chk = DHT.read11(DHT11_PIN);
- Serial.write(0b00);
- Serial.println(DHT.temperature);
- Serial.write(0b01);
- Serial.println(DHT.humidity);
- delay(5000);
+ Serial.write(0b0);
+ Serial.print(DHT.temperature);
+ Serial.print(':');
+ Serial.print(DHT.humidity);
+ Serial.print(':');
+ Serial.println(to_seconds());
+ delay(1000);
 }
 
 void printWindSpeed() {
- mh_rtc.updateTime();
- Serial.write(0b10);
+ Serial.write(0b1);
  Serial.println(to_seconds());
 }
