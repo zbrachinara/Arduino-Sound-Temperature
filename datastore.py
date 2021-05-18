@@ -64,6 +64,9 @@ class Data:
         self.humidity_dat = ([], [])
         self.an_dat = []
 
+        self.g_temperature_dat = Buffer(10)
+        self.g_humidity_dat = Buffer(10)
+
         self.read_thread.start()
 
     def update(self):
@@ -79,11 +82,14 @@ class Data:
             if prefix == r'\x00':  # DHT Read
                 # print("DHT:", end='')
 
-                temp, hum, time = content.split(':')
+                temp, hum, time = (float(i) for i in content.split(':'))
                 self.temperature_dat[0].append(time)
                 self.temperature_dat[1].append(temp)
                 self.humidity_dat[0].append(time)
                 self.humidity_dat[1].append(hum)
+
+                self.g_temperature_dat.append(time, temp)
+                self.g_humidity_dat.append(time, hum)
 
             elif prefix == r'\x01':  # Anemometer Read
                 # print("An_cycle:", end='')
