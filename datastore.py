@@ -2,7 +2,6 @@ import sys
 import serial
 
 from threading import Thread
-from queue import Queue
 
 for i in range(0, 20):
     port_name = 'undefined_os_behavior'
@@ -35,7 +34,6 @@ class Data:
 
     def __init__(self):
         self.read_thread = Thread(target=self.update, daemon=True, name="read_thread")
-        self.comm = Queue()
 
         self.temperature_dat = ([], [])
         self.humidity_dat = ([], [])
@@ -65,14 +63,3 @@ class Data:
             elif prefix == r'\x01':  # Anemometer Read
                 # print("An_cycle:", end='')
                 self.an_dat.append(content)
-
-            self.comm.put(line)
-
-
-    def print_buffer(self):
-        if not self.comm.empty():
-            line = self.comm.get()
-            prefix = line[:4]
-            content = line[4:]
-
-            print(content)
