@@ -10,5 +10,5 @@ if __name__ == '__main__':
         print(*data.humidity_dat)
         print(data.an_dat)
         sleep(5)
-        # data.print_buffer()
+
 
