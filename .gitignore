@@ -1,3 +1,4 @@
 .idea
 __pycache__
 __pycache__/datastore.cpython-39.pyc
+*.pyc
