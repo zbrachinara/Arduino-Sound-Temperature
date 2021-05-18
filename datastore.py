@@ -29,6 +29,31 @@ def read():
     # that line there exists to strip all of that off
     return out
 
+class Buffer:
+
+    def __init__(self, size):
+        self.size = size
+        self.contents = ([], [])
+
+    def __str__(self):
+        return f'x: {self.contents[0]}\ny: {self.contents[1]}'
+
+    def __iter__(self):
+        for i in self.contents:
+            yield i
+
+    def append(self, x, y):
+        self.contents[0].append(x)
+        self.contents[1].append(y)
+
+        cutoff = x - self.size
+
+        for i in self.contents[0]:
+            if i > cutoff:
+                break
+            self.contents[0].pop(0)
+            self.contents[1].pop(0)
+
 
 class Data:
 
