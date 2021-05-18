@@ -13,6 +13,7 @@ for i in range(0, 20):
             port_name = f'COM{i}'
 
         arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
+        break
     except serial.serialutil.SerialException:
         continue
 
