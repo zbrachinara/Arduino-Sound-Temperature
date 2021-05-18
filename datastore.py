@@ -4,14 +4,20 @@ import serial
 from threading import Thread
 from queue import Queue
 
-port_name = 'undefined_os_behavior'
-if sys.platform == 'linux':
-    port_name = '/dev/ttyACM0'
-elif sys.platform == 'win32':
-    port_name = 'COM4'
+for i in range(0, 20):
+    port_name = 'undefined_os_behavior'
+    try:
+        if sys.platform == 'linux':
+            port_name = f'/dev/ttyACM{i}'
+        elif sys.platform == 'win32':
+            port_name = f'COM{i}'
 
-arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
+        arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
+    except serial.serialutil.SerialException:
+        continue
 
+if arduino is None:
+    sys.exit("SerialException: Problem getting port")
 
 def read():
     out = str(arduino.readline())
