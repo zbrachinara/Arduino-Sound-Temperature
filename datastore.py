@@ -3,6 +3,8 @@ import serial
 
 from threading import Thread
 
+arduino = None
+
 for i in range(0, 20):
     port_name = 'undefined_os_behavior'
     try:
