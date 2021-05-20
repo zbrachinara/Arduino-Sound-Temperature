@@ -30,8 +30,7 @@ class Display:
         self.humidity_line.set_ydata(self.data.g_humidity_dat[1])
 
         self.ax.set_ylim([0, 100])
-        # self.ax.set_xlim([self.data.latest_DHT - 20, self.data.latest_DHT])
-        self.ax.set_xlim([0, 20])
+        self.ax.set_xlim([self.data.latest_DHT - 20, self.data.latest_DHT])
 
         self.tk_obj.draw()
         self.tk_obj.flush_events()

@@ -71,8 +71,8 @@ class Data:
         self.humidity_dat = ([], [])
         self.an_dat = []
 
-        self.g_temperature_dat = Buffer(10)
-        self.g_humidity_dat = Buffer(10)
+        self.g_temperature_dat = Buffer(20)
+        self.g_humidity_dat = Buffer(20)
 
         self.read_thread.start()
 
