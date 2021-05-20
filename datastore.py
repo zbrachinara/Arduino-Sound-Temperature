@@ -42,6 +42,9 @@ class Buffer:
         for i in self.contents:
             yield i
 
+    def __getitem__(self, item):
+        return self.contents[item]
+
     def append(self, x, y):
         self.contents[0].append(x)
         self.contents[1].append(y)
@@ -59,6 +62,8 @@ class Data:
 
     def __init__(self):
         self.read_thread = Thread(target=self.update, daemon=True, name="read_thread")
+
+        self.latest_DHT = 0
 
         self.temperature_dat = ([], [])
         self.humidity_dat = ([], [])
@@ -90,6 +95,8 @@ class Data:
 
                 self.g_temperature_dat.append(time, temp)
                 self.g_humidity_dat.append(time, hum)
+
+                self.latest_DHT = time
 
             elif prefix == r'\x01':  # Anemometer Read
                 # print("An_cycle:", end='')
