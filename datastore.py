@@ -6,7 +6,6 @@ from threading import Thread
 
 arduino = None
 
-
 port_name = getenv("ARDUINO_SERIAL_DEFAULT")
 if port_name is None:
     port_name = "default_not_set"
@@ -16,14 +15,13 @@ for i in range(0, 21):
         arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
         if arduino is not None:
             break
-
-        if sys.platform == 'linux':
-            port_name = f'/dev/ttyACM{i}'
-        elif sys.platform == 'win32':
-            port_name = f'COM{i}'
-
     except serial.serialutil.SerialException:
-        continue
+        pass
+
+    if sys.platform == 'linux':
+        port_name = f'/dev/ttyACM{i}'
+    elif sys.platform == 'win32':
+        port_name = f'COM{i}'
 
 if arduino is None:
     sys.exit("SerialException: Problem getting port")
@@ -108,3 +106,4 @@ class Data:
             elif prefix == r'\x01':  # Anemometer Read
                 # print("An_cycle:", end='')
                 self.an_dat.append(content)
+                print("pinged at:", content)
