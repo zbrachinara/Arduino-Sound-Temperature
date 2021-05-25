@@ -6,8 +6,12 @@ from threading import Thread
 
 arduino = None
 
+
 port_name = getenv("ARDUINO_SERIAL_DEFAULT")
-for i in range(0, 20):
+if port_name is None:
+    port_name = "default_not_set"
+
+for i in range(0, 21):
     try:
         arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
         if arduino is not None:
