@@ -1,22 +1,23 @@
 import sys
 import serial
+from os import getenv
 
 from threading import Thread
 
 arduino = None
 
-for i in range(0, 20):
-    port_name = 'undefined_os_behavior'
-    try:
-        if sys.platform == 'linux':
-            port_name = f'/dev/ttyACM{i}'
-        elif sys.platform == 'win32':
-            port_name = f'COM{i}'
+with getenv('ARDUINO_SERIAL_DEFAULT') as port_name:
+    for i in range(0, 20):
+        try:
+            if sys.platform == 'linux':
+                port_name = f'/dev/ttyACM{i}'
+            elif sys.platform == 'win32':
+                port_name = f'COM{i}'
 
-        arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
-        break
-    except serial.serialutil.SerialException:
-        continue
+            arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
+            break
+        except serial.serialutil.SerialException:
+            continue
 
 if arduino is None:
     sys.exit("SerialException: Problem getting port")
