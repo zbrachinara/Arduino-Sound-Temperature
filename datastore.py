@@ -26,11 +26,9 @@ if arduino is None:
 
 def read():
     out = str(arduino.readline())
-    if sys.platform == 'linux':
-        out = out.split('\'')[1].split('\\r')[0]  # so basically:
+    out = out.split('\'')[1].split('\\r')[0]  # so basically:
     # arduino.readline() will return a string of form:
     #   b'[content]\r\n'
-    # at least, on linux.
     # that line there exists to strip all of that off
     return out
 
