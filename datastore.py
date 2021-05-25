@@ -6,18 +6,20 @@ from threading import Thread
 
 arduino = None
 
-with getenv('ARDUINO_SERIAL_DEFAULT') as port_name:
-    for i in range(0, 20):
-        try:
-            if sys.platform == 'linux':
-                port_name = f'/dev/ttyACM{i}'
-            elif sys.platform == 'win32':
-                port_name = f'COM{i}'
-
-            arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
+port_name = getenv("ARDUINO_SERIAL_DEFAULT")
+for i in range(0, 20):
+    try:
+        arduino = serial.Serial(port=port_name, baudrate=9600, timeout=0.1)
+        if arduino is not None:
             break
-        except serial.serialutil.SerialException:
-            continue
+
+        if sys.platform == 'linux':
+            port_name = f'/dev/ttyACM{i}'
+        elif sys.platform == 'win32':
+            port_name = f'COM{i}'
+
+    except serial.serialutil.SerialException:
+        continue
 
 if arduino is None:
     sys.exit("SerialException: Problem getting port")
