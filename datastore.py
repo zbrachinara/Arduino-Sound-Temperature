@@ -1,6 +1,6 @@
 import sys
 import serial
-from os import getenv
+from os import getenv, mkdir
 
 from threading import Thread
 
@@ -63,6 +63,11 @@ class Buffer:
             self.contents[1].pop(0)
 
 
+def write_csv(data, filename):
+    with open(filename, "a") as file:
+        for dat in zip(*data):
+            file.write(", ".join(str(i) for i in dat))
+
 class Data:
 
     def __init__(self):
@@ -78,6 +83,21 @@ class Data:
         self.g_humidity_dat = Buffer(20)
 
         self.read_thread.start()
+
+    def write(self):
+
+        # TODO: Signal read_thread to pause
+
+        try:
+            mkdir('data')
+        except FileExistsError:
+            pass
+
+        write_csv(self.temperature_dat, 'data/temperature.csv')
+        self.temperature_dat = ([], [])
+
+        write_csv(self.humidity_dat, 'data/humidity.csv')
+        self.humidity_dat = ([], [])
 
     def update(self):
         while True:
