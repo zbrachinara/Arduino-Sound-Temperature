@@ -33,7 +33,7 @@ for i in range(0, 21):
 if arduino is None:
     sys.exit("SerialException: Problem getting port")
 
-sleep(1)  # Hotfix to allow the arduino to reset its connection
+sleep(2)  # Hotfix to allow the arduino to reset its connection
 
 ####################################################################
 #                        EXPOSED ELEMENTS                          #
