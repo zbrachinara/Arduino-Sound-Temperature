@@ -26,6 +26,7 @@ for i in range(0, 21):
 if arduino is None:
     sys.exit("SerialException: Problem getting port")
 
+
 def read():
     out = str(arduino.readline())
     out = out.split('\'')[1].split('\\r')[0]  # so basically:
@@ -33,6 +34,7 @@ def read():
     #   b'[content]\r\n'
     # that line there exists to strip all of that off
     return out
+
 
 class Buffer:
 
@@ -71,16 +73,21 @@ def write_csv(data, filename):
 class Data:
 
     def __init__(self):
-        self.read_thread = Thread(target=self.update, daemon=True, name="read_thread")
+        self.read_thread = Thread(
+            target=self.update,
+            daemon=True,
+            name="read_thread"
+        )
 
         self.latest_DHT = 0
 
-        self.temperature_dat = ([], [])
-        self.humidity_dat = ([], [])
+        self.temp_dat = ([], []) # Temperature data [Time], [Temperature]
+        self.hum_dat = ([], []) # Humidity data [Time], [Humidity]
         self.an_dat = []
 
-        self.g_temperature_dat = Buffer(20)
-        self.g_humidity_dat = Buffer(20)
+        # These store the latest 20 seconds of data from the arduino
+        self.g_temp_dat = Buffer(20)
+        self.g_hum_dat = Buffer(20)
 
         self.read_thread.start()
 
@@ -93,13 +100,32 @@ class Data:
         except FileExistsError:
             pass
 
-        write_csv(self.temperature_dat, 'data/temperature.csv')
-        self.temperature_dat = ([], [])
+        write_csv(self.temp_dat, 'data/temperature.csv')
+        self.temp_dat = ([], [])
 
-        write_csv(self.humidity_dat, 'data/humidity.csv')
-        self.humidity_dat = ([], [])
+        write_csv(self.hum_dat, 'data/humidity.csv')
+        self.hum_dat = ([], [])
 
     def update(self):
+        def dht_process():
+            temp, hum, time = (float(i) for i in content.split(':'))
+            self.temp_dat[0].append(time)
+            self.temp_dat[1].append(temp)
+
+            self.hum_dat[0].append(time)
+            self.hum_dat[1].append(hum)
+
+
+            self.g_temp_dat.append(time, temp)
+            self.g_hum_dat.append(time, hum)
+
+            self.latest_DHT = time
+
+        def an_process():
+            self.an_dat.append(content)
+            print("pinged at:", content)
+
+        # read_thread EVENT LOOP
         while True:
             line = read()
 
@@ -110,20 +136,8 @@ class Data:
             content = line[4:]
 
             if prefix == r'\x00':  # DHT Read
-                # print("DHT:", end='')
-
-                temp, hum, time = (float(i) for i in content.split(':'))
-                self.temperature_dat[0].append(time)
-                self.temperature_dat[1].append(temp)
-                self.humidity_dat[0].append(time)
-                self.humidity_dat[1].append(hum)
-
-                self.g_temperature_dat.append(time, temp)
-                self.g_humidity_dat.append(time, hum)
-
-                self.latest_DHT = time
+                dht_process()
 
             elif prefix == r'\x01':  # Anemometer Read
-                # print("An_cycle:", end='')
-                self.an_dat.append(content)
-                print("pinged at:", content)
+                an_process()
+
