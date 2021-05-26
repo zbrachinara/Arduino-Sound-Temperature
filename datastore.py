@@ -68,7 +68,7 @@ class Buffer:
 def write_csv(data, filename):
     with open(filename, "a") as file:
         for dat in zip(*data):
-            file.write(", ".join(str(i) for i in dat))
+            file.write(", ".join(str(i) for i in dat) + "\n")
 
 class Data:
 
