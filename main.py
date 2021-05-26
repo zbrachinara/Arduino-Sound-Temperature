@@ -8,10 +8,12 @@ root = tk.Tk()
 
 data = Data()
 display = Display(data, root)
+save = tk.Button(master=root, text="Save", command=data.write)
 
 if __name__ == '__main__':
 
     canvas = display.tk_obj
+    save.pack(side=tk.BOTTOM)
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
     def refresh():
