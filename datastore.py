@@ -5,6 +5,12 @@ from time import sleep
 
 from threading import Thread
 
+####################################################################
+#                   SERIAL PORT INITIALIZATION                     #
+####################################################################
+# note: for port autodetect, no mac support
+# sorry, apple users
+
 arduino = None
 
 port_name = getenv("ARDUINO_SERIAL_DEFAULT")
@@ -29,6 +35,11 @@ if arduino is None:
 
 sleep(1)  # Hotfix to allow the arduino to reset its connection
 
+####################################################################
+#                        EXPOSED ELEMENTS                          #
+####################################################################
+
+
 def read():
     out = str(arduino.readline())
     out = out.split('\'')[1].split('\\r')[0]  # so basically:
@@ -36,6 +47,12 @@ def read():
     #   b'[content]\r\n'
     # that line there exists to strip all of that off
     return out
+
+
+def write_csv(data, filename):
+    with open(filename, "a") as file:
+        for dat in zip(*data):
+            file.write(", ".join(str(i) for i in dat) + "\n")
 
 
 class Buffer:
@@ -65,12 +82,6 @@ class Buffer:
                 break
             self.contents[0].pop(0)
             self.contents[1].pop(0)
-
-
-def write_csv(data, filename):
-    with open(filename, "a") as file:
-        for dat in zip(*data):
-            file.write(", ".join(str(i) for i in dat) + "\n")
 
 class Data:
 
