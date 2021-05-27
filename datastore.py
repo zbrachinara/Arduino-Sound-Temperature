@@ -142,7 +142,6 @@ class Data:
 
         pre = read()
         while pre.split(':')[-1] != '0':
-            print(pre)
             pre = read()
 
         # read_thread EVENT LOOP
