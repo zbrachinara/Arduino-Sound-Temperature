@@ -97,8 +97,8 @@ class Data:
         self.an_dat = []
 
         # These store the latest 20 seconds of data from the arduino
-        self.g_temp_dat = Buffer(20)
-        self.g_hum_dat = Buffer(20)
+        self.g_temp_dat = Buffer(100)
+        self.g_hum_dat = Buffer(100)
 
         self.read_thread.start()
 
@@ -116,6 +116,10 @@ class Data:
 
         write_csv(self.hum_dat, 'data/humidity.csv')
         self.hum_dat = ([], [])
+
+    def write_if(self):
+        if len(self.temp_dat[0]) > 5000:  # Setting this number is like playing a game of chicken
+            self.write()
 
     def update(self):
         def dht_process():
@@ -157,4 +161,6 @@ class Data:
 
             elif prefix == r'\x01':  # Anemometer Read
                 an_process()
+
+            self.write_if()
 
