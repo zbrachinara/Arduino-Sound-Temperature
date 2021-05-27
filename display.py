@@ -32,7 +32,7 @@ class Display:
         self.hum_line.set_xdata(self.data.g_hum_dat[0])
         self.hum_line.set_ydata(self.data.g_hum_dat[1])
 
-        self.ax.set_xlim([self.data.latest_DHT - 20, self.data.latest_DHT])
+        self.ax.set_xlim([self.data.latest_DHT - 100, self.data.latest_DHT])
 
         self.tk_obj.draw()
         self.tk_obj.flush_events()
