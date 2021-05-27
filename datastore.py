@@ -33,8 +33,6 @@ for i in range(0, 21):
 if arduino is None:
     sys.exit("SerialException: Problem getting port")
 
-sleep(2)  # Hotfix to allow the arduino to reset its connection
-
 ####################################################################
 #                        EXPOSED ELEMENTS                          #
 ####################################################################
@@ -138,8 +136,14 @@ class Data:
             self.an_dat.append(content)
             print("pinged at:", content)
 
+        pre = read()
+        while pre.split(':')[-1] != '0':
+            print(pre)
+            pre = read()
+
         # read_thread EVENT LOOP
         while True:
+
             line = read()
 
             if line == '':
