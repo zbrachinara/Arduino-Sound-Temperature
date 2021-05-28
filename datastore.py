@@ -117,6 +117,11 @@ class Data:
         write_csv(self.hum_dat, 'data/humidity.csv')
         self.hum_dat = ([], [])
 
+        with open('data/anemometer_pings.csv', "a") as file:
+            for dat in self.an_dat:
+                file.write(dat + '\n')
+        self.an_dat = []
+
     def write_if(self):
         if len(self.temp_dat[0]) > 5000:  # Setting this number is like playing a game of chicken
             self.write()
